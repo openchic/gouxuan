@@ -10,7 +10,7 @@
 - [x] 2.4 `packages/electron/package.json` 改名 `@gouxuan/electron`、`private`、版本对齐 0.1.0，脚本名与 turbo 任务一致并改用 `pnpm`，移除 `electron-updater`、eslint 相关依赖、`prettier` 与包内 `pnpm.onlyBuiltDependencies`
 - [x] 2.5 静态检查入口移到根：把 `packages/electron/eslint.config.mjs` 原样平移到根 `eslint.config.mjs`（规则集合不变，glob 覆盖 `packages/**`），配套 eslint 与插件依赖上移，`lint-staged` 跑 `eslint --fix` + `prettier --write`
 - [x] 2.6 删除根目录失效配置 `tsconfig.json` 与 `playwright.config.ts`
-- [x] 2.7 根新增 `.prettierrc.yaml`（`semi: false` + `singleQuote: true`，依据模板源码实测 0 条带分号语句、最长行 80）与 `.prettierignore`；`.gitignore` 增加 `.turbo/`、`.eslintcache`、`*.tsbuildinfo`
+- [x] 2.7 格式化沿用根已有的 `.prettierrc`，新增 `.prettierignore`（排除 `out`、`dist`、`release`、`pnpm-lock.yaml` 与客户端 `resources`）；`.gitignore` 增加 `.turbo/`、`.eslintcache`、`*.tsbuildinfo`
 - [x] 2.8 补回 `react` 与 `react-dom`：在 2.4 剥离 eslint 依赖时把模板 devDependencies 里的这两项一并删掉了，客户端渲染层因此无法构建
 - [ ] 2.9 在客户端依赖重新接入后，核对 `pnpm-workspace.yaml` 的 `allowBuilds` 与 `minimumReleaseAgeExclude`：当前仍列着不被任何包声明的旧条目（`@astryxdesign/*`、`@google/genai`、`better-sqlite3`、`typescript-eslint@8.66.0`），其中一部分会随 `build-qa-client` 回来
 
@@ -29,7 +29,8 @@
 - [x] 4.5 实测 `npm run build` 不被 turbo 拒绝，输出 `FULL TURBO` 并命中缓存：`packageManager` 字段只是声明，不构成包管理器门禁
 - [x] 4.6 `openspec validate setup-monorepo --type change --strict --no-interactive` 通过
 - [ ] 4.7 `pnpm package:mac` 产物名为 `Gouxuan-<version>.dmg` 与 `.zip`，访达与菜单栏显示名确认为钩玄
-- [ ] 4.8 首次 `pnpm format` 规范了 20 个文件（模板源码补尾逗号、`react` 版本在根 lint 配置显式写 `19.2`）；打包与界面验证后再复查一次
+- [x] 4.8 首次 `pnpm format` 按根 `.prettierrc` 规范了 20 个文件（模板源码补尾逗号、单参数箭头去括号），根 lint 配置的 react 版本显式写为 `19.2`
+- [x] 4.9 删除本次另建的 `.prettierrc.yaml`：prettier 查找顺序里它排在仓库根已有的 `.prettierrc` 之后，从未生效
 
 ## 5. 归属后续 change
 

@@ -69,7 +69,7 @@ turbo 2.11.5，任务只定义在根，脚本实现留在包内：
 - `typescript` 在根与客户端包都声明同一个 `^5.9.3` range：根需要它满足 eslint ts 预设的 peer，包需要它跑 `tsc --noEmit`。重装后要确认 pnpm 解析成同一版本。
 - 应用运行时依赖（react、electron、vite、未来的 Pi/Astryx/SQLite）全部在包内声明，不依赖根安装顺带提供。旧的 `electron-builder install-app-deps` postinstall 已随应用依赖移到包内。
 - `tsconfig` 留在包内：main/preload 与 renderer 分属 node 与 dom 两套 lib 和 globals，客户端包的三件套是 electron-vite 的约定；收到根上只会变成根 project 引用再绕回包内。
-- prettier 配置唯一份在根：`.prettierrc.yaml` 写 `semi: false` 与 `singleQuote: true`，其余用默认值。依据是模板源码实测 0 条带分号的语句、最长行 80 字符；用 prettier 默认的 `semi: true` 会把整个骨架重写一遍。
+- prettier 配置沿用仓库根已有的 `.prettierrc`（`semi: false`、`singleQuote: true`、`tabWidth: 2`、`trailingComma: "es5"`、`arrowParens: "avoid"`）。实测第一次 `pnpm format` 按它重写了 20 个文件：给对象与数组补尾逗号、把 `(details) =>` 收成 `details =>`。模板源码 0 条带分号语句、最长行 80，与 `semi: false` 一致。
 - Playwright 配置跟随 e2e 用例放在客户端包内；现在没有用例，所以没有配置文件。
 - `.npmrc` 的 `shamefully-hoist=true` 暂时保留。它会让包解析到未声明的依赖，掩盖声明缺失；移除需要重装并逐包验证，属于独立一次改动。
 - 包管理器约束目前是声明而非强制：根写 `packageManager: pnpm@11.9.0`，但实测 turbo 2.11.5 在 `npm run build` 下不报错、照常命中缓存。原先的 `npx only-allow pnpm` 每次安装要联网取包，删除它等于放弃唯一的硬门禁；要恢复强制只能靠 corepack 或重新引入守卫。
@@ -86,7 +86,7 @@ turbo 2.11.5，任务只定义在根，脚本实现留在包内：
 
 **自动更新残留删除**：`electron-updater` 依赖、`dev-app-update.yml` 与 `electron-builder.yml` 的 `publish` 段（指向 `https://example.com/auto-updates`）删除，PLAN.md 的 v1 明确不含自动更新。
 
-**静态检查入口在根**：ESLint 9 的 flat config 按当前工作目录查找，编辑器和 CI 都以仓库根为工作目录；配置放在包内会让根上跑的那套规则与包内跑的那套不一致，同一份源码出现两种检查结果，且每加一个包就要复制插件与版本。因此把包内那份 `eslint.config.mjs` 原样平移到根——规则集合不变，glob 从配置文件所在目录展开后覆盖 `packages/**`——与 `.prettierrc.yaml` 一起只在根存在，`lint-staged` 因此可以直接跑 `eslint --fix` 而不必跨包指定 config 路径。代价是 `pnpm --filter @gouxuan/electron lint` 不再存在，包专属规则差异要写成根配置里的 `files` 段。
+**静态检查入口在根**：ESLint 9 的 flat config 按当前工作目录查找，编辑器和 CI 都以仓库根为工作目录；配置放在包内会让根上跑的那套规则与包内跑的那套不一致，同一份源码出现两种检查结果，且每加一个包就要复制插件与版本。因此把包内那份 `eslint.config.mjs` 原样平移到根——规则集合不变，glob 从配置文件所在目录展开后覆盖 `packages/**`——与根既有的 `.prettierrc` 一起只在根存在，`lint-staged` 因此可以直接跑 `eslint --fix` 而不必跨包指定 config 路径。代价是 `pnpm --filter @gouxuan/electron lint` 不再存在，包专属规则差异要写成根配置里的 `files` 段。
 
 ## Risks / Trade-offs
 

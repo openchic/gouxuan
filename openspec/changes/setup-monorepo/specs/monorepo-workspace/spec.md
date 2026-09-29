@@ -55,7 +55,7 @@
 #### Scenario: 全仓一种排版
 
 - **WHEN** 在任意子包内执行格式化
-- **THEN** 使用根 `.prettierrc.yaml`，仓库内不存在第二份 prettier 配置
+- **THEN** 使用根 `.prettierrc`，仓库内不存在第二份 prettier 配置
 
 ### Requirement: 非 JS 工具链边界
 

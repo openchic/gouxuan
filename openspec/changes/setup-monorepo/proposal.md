@@ -11,7 +11,7 @@
 - 删除自动更新残留（`electron-updater` 依赖、`dev-app-update.yml`、`publish` 配置段）与模板的 win/linux 打包段。
 - **BREAKING** 静态检查入口移到根：把 `packages/electron/eslint.config.mjs` 原样平移到根（规则集合不变），删除包内那份与包内 eslint 相关依赖，`lint` 不再是 turbo 任务。
 - 删除根目录失效配置：`tsconfig.json`（引用已不存在的 node/web 配置）与 `playwright.config.ts`（`testDir: ./e2e` 已不存在）。
-- 格式化统一在根（`.prettierrc.yaml` + `.prettierignore`）。
+- 格式化沿用根已有的 `.prettierrc`，新增 `.prettierignore`。
 
 ## Capabilities
 
@@ -26,7 +26,7 @@
 
 ## Impact
 
-配置：`pnpm-workspace.yaml`、`turbo.json`、根与 `packages/electron` 的 `package.json`、根 `eslint.config.mjs`、`packages/electron/electron-builder.yml`、`.gitignore`、`.prettierrc.yaml`、`.prettierignore`。
+配置：`pnpm-workspace.yaml`、`turbo.json`、根与 `packages/electron` 的 `package.json`、根 `eslint.config.mjs`、`packages/electron/electron-builder.yml`、`.gitignore`、`.prettierignore`。
 
 依赖：根新增 turbo 2.11.5，并承接从包内上移的静态检查工具链（eslint、`@electron-toolkit/eslint-config-ts`、`@electron-toolkit/eslint-config-prettier`、eslint-plugin-react/react-hooks/react-refresh、typescript）与 prettier；已执行 `pnpm install`，`pnpm-lock.yaml` 按 workspace 结构重建。`pnpm-workspace.yaml` 的 `allowBuilds` 与 `minimumReleaseAgeExclude` 仍列着已不被任何包声明的条目（`@astryxdesign/*`、`@google/genai`、`better-sqlite3`、`protobufjs`、typescript-eslint 8.66.0），其中一部分会随客户端实现回来，届时再核对。
 
