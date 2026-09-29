@@ -1,0 +1,54 @@
+{
+  "name": "gouxuan",
+  "version": "0.1.0",
+  "private": true,
+  "description": "钩玄 · 基于 RAG 的保险咨询问答系统",
+  "license": "MIT",
+  "author": "openchic",
+  "packageManager": "pnpm@11.9.0",
+  "engines": {
+    "node": ">=22.19.0",
+    "pnpm": ">=11.9.0"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "check": "pnpm format:check && pnpm lint && turbo run typecheck",
+    "dev": "turbo run dev",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint .",
+    "package:mac": "turbo run build:mac",
+    "prepare": "husky",
+    "start": "turbo run start",
+    "typecheck": "turbo run typecheck"
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,mjs}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,yml,yaml,css,less,md}": [
+      "prettier --write"
+    ]
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@electron-toolkit/eslint-config-prettier": "^3.0.0",
+    "@electron-toolkit/eslint-config-ts": "^3.1.0",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.4",
+    "prettier": "^3.7.4",
+    "turbo": "2.11.5",
+    "typescript": "^5.9.3"
+  }
+}

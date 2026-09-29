@@ -1,0 +1,13 @@
+node_modules/
+.pnpm-store/
+.turbo/
+.eslintcache
+*.tsbuildinfo
+out/
+release/
+dist/
+coverage/
+playwright-report/
+test-results/
+.DS_Store
+*.log

@@ -1,0 +1,25 @@
+packages:
+  - packages/*
+allowBuilds:
+  '@astryxdesign/cli': true
+  '@astryxdesign/core': true
+  '@google/genai': true
+  better-sqlite3: true
+  electron: true
+  electron-winstaller: false
+  esbuild: true
+  protobufjs: true
+overrides:
+  '@electron/get': 5.1.0
+minimumReleaseAgeExclude:
+  - '@typescript-eslint/eslint-plugin@8.66.0'
+  - '@typescript-eslint/parser@8.66.0'
+  - '@typescript-eslint/project-service@8.66.0'
+  - '@typescript-eslint/scope-manager@8.66.0'
+  - '@typescript-eslint/tsconfig-utils@8.66.0'
+  - '@typescript-eslint/type-utils@8.66.0'
+  - '@typescript-eslint/types@8.66.0'
+  - '@typescript-eslint/typescript-estree@8.66.0'
+  - '@typescript-eslint/utils@8.66.0'
+  - '@typescript-eslint/visitor-keys@8.66.0'
+  - typescript-eslint@8.66.0

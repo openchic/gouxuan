@@ -1,0 +1,5 @@
+out
+dist
+release
+pnpm-lock.yaml
+packages/electron/resources

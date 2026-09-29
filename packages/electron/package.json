@@ -1,0 +1,38 @@
+{
+  "name": "@gouxuan/electron",
+  "version": "0.1.0",
+  "private": true,
+  "description": "钩玄桌面客户端",
+  "license": "MIT",
+  "author": "openchic",
+  "main": "./out/main/index.js",
+  "scripts": {
+    "build": "pnpm typecheck && electron-vite build",
+    "build:mac": "electron-vite build && electron-builder --mac dmg zip",
+    "build:unpack": "pnpm build && electron-builder --dir",
+    "dev": "electron-vite dev",
+    "postinstall": "electron-builder install-app-deps",
+    "start": "electron-vite preview",
+    "typecheck": "pnpm typecheck:node && pnpm typecheck:web",
+    "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
+    "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false"
+  },
+  "dependencies": {
+    "@electron-toolkit/preload": "^3.0.2",
+    "@electron-toolkit/utils": "^4.0.0"
+  },
+  "devDependencies": {
+    "@electron-toolkit/tsconfig": "^2.0.0",
+    "@types/node": "^22.19.1",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "electron": "^39.2.6",
+    "electron-builder": "^26.0.12",
+    "electron-vite": "^5.0.0",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.6"
+  }
+}
