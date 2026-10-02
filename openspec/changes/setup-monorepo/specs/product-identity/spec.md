@@ -6,7 +6,7 @@
 
 #### Scenario: 打包标识
 
-- **WHEN** 读取 `packages/electron/electron-builder.yml`
+- **WHEN** 读取 `apps/electron/electron-builder.yml`
 - **THEN** `appId` 与 `productName` 为钩玄取值，不存在模板占位标识
 
 #### Scenario: 文档不残留旧标识

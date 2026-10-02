@@ -1,0 +1,27 @@
+# 检索服务的运行定义。索引与语料走 named volume，不 bind mount 宿主目录
+# （macOS 跨 VM 挂载会拖慢热重载与索引读写）。
+services:
+  api:
+    build:
+      context: ./services/api
+    image: gouxuan-api
+    ports:
+      - '8000:8000'
+    environment:
+      GOUXUAN_INDEX_PATH: /app/data/index.db
+    volumes:
+      - api-data:/app/data
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'python',
+          '-c',
+          "import urllib.request as u; u.urlopen('http://127.0.0.1:8000/healthz')",
+        ]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  api-data:

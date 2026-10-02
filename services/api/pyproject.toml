@@ -1,0 +1,36 @@
+[project]
+name = "gouxuan-api"
+version = "0.1.0"
+description = "钩玄语料摄取与检索服务"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi>=0.142.2",
+    "uvicorn>=0.54.0",
+    "pydantic>=2.13.5",
+    "pydantic-settings>=2.15.0",
+    "httpx>=0.28.1",
+    "numpy>=2.5.3",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.16.10",
+    "pyright>=1.1.414",
+]
+
+# 无 [build-system]：这是只跑在自己容器里的应用，不被安装，因此用 uv 的 virtual project 形态。
+
+[tool.ruff]
+extend-exclude = ["data"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.pyright]
+include = ["app", "tests"]
+pythonVersion = "3.13"

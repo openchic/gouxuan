@@ -9,7 +9,6 @@
   "scripts": {
     "build": "pnpm typecheck && electron-vite build",
     "build:mac": "electron-vite build && electron-builder --mac dmg zip",
-    "build:unpack": "pnpm build && electron-builder --dir",
     "dev": "electron-vite dev",
     "postinstall": "electron-builder install-app-deps",
     "start": "electron-vite preview",

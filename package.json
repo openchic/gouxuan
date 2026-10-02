@@ -13,14 +13,14 @@
   "scripts": {
     "build": "turbo run build",
     "check": "pnpm format:check && pnpm lint && turbo run typecheck",
+    "check:api": "uv --directory services/api run ruff check . && uv --directory services/api run pytest -q",
     "dev": "turbo run dev",
+    "dev:api": "docker compose up api",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "lint": "eslint .",
     "package:mac": "turbo run build:mac",
-    "prepare": "husky",
-    "start": "turbo run start",
-    "typecheck": "turbo run typecheck"
+    "prepare": "husky"
   },
   "commitlint": {
     "extends": [

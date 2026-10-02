@@ -2,7 +2,7 @@
 
 ### Requirement: workspace 成员
 
-仓库 MUST 通过 `pnpm-workspace.yaml` 的 `packages: ['packages/*']` 声明 JS 子包，子包必须持有自己的 `package.json` 才能被 pnpm 与 turbo 管理。
+仓库 MUST 通过 `pnpm-workspace.yaml` 的 `packages: ['apps/*']` 声明 JS 子包，子包必须持有自己的 `package.json` 才能被 pnpm 与 turbo 管理。
 
 #### Scenario: 客户端包受管
 
@@ -11,7 +11,7 @@
 
 #### Scenario: 新增子包不改结构定义
 
-- **WHEN** 在 `packages/` 下新增一个含 `package.json` 的子包
+- **WHEN** 在 `apps/` 下新增一个含 `package.json` 的子包
 - **THEN** 无需修改 `pnpm-workspace.yaml` 与 `turbo.json`，该包即参与根命令
 
 ### Requirement: 任务编排分层
@@ -56,17 +56,3 @@
 
 - **WHEN** 在任意子包内执行格式化
 - **THEN** 使用根 `.prettierrc`，仓库内不存在第二份 prettier 配置
-
-### Requirement: 非 JS 工具链边界
-
-检索服务 MUST 使用独立 Python 工具链并位于 workspace glob 之外，workspace 内不为其放置只做命令转发的 `package.json`。
-
-#### Scenario: Python 服务不被 pnpm 解析
-
-- **WHEN** 在根执行安装或 workspace 相关命令
-- **THEN** `services/api` 不出现在包列表中，其依赖不由 pnpm 解析
-
-#### Scenario: 契约同批变更
-
-- **WHEN** 检索接口定义发生变化
-- **THEN** 客户端消费的类型与调用在同一个提交内更新

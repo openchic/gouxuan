@@ -1,0 +1,10 @@
+.dockerignore
+Dockerfile
+__pycache__/
+*.pyc
+.pytest_cache/
+.ruff_cache/
+.pyright/
+.venv/
+data/
+tests/
