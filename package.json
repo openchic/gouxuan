@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "description": "钩玄 · 基于 RAG 的保险咨询问答系统",
-  "license": "MIT",
+  "license": "AGPL-3.0-only",
   "author": "openchic",
   "packageManager": "pnpm@11.9.0",
   "engines": {

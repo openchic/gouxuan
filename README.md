@@ -27,4 +27,10 @@ pnpm package:mac # 构建 macOS 安装包
 
 检索服务还需要 `uv`（生成锁文件用 `uv lock`）。
 
-单个子包：`pnpm --filter @gouxuan/electron dev`。
+单个子包：`pnpm --filter @gouxuan/electron dev`。检索服务：`pnpm dev:api`。
+
+## 许可
+
+- 代码（本仓库全部内容）：AGPL-3.0-only，见 [LICENSE](LICENSE)。分发桌面端或基于本仓库提供服务时，需按 AGPL 提供对应源码。Copyright (C) 2026 openchic。
+- 保险语料、索引产物与评测集不在该许可下，也不进本仓库；它们的授权另行处理。
+- 依赖许可已扫描：无 GPL 系家族冲突，仅 `lightningcss`、`certifi` 为 MPL-2.0（与 AGPL 兼容）。

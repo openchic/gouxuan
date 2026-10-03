@@ -153,6 +153,12 @@ GitHub Actions 按栈拆 workflow，用原生 `paths:` 过滤，不引入 affect
 
 包名 `@gouxuan/*`，`productName` 为钩玄，`appId` 为 `com.openchic.gouxuan`，数据库文件与会话目录使用钩玄标识。安装包与压缩产物名固定 ASCII（`Gouxuan-<version>.dmg`），显示名与产物名允许不同，避免非 ASCII 文件名进入签名与公证链路。
 
+## 许可
+
+代码走 AGPL-3.0-only 单轨：商业形态是自己运营托管版收费，不需要对 B2B 发专有许可，因此也不要求贡献者签 CLA。分发桌面端即触发源码提供义务，具体写法与依赖扫描结果记在 README 的许可节。
+
+保险语料、索引产物与评测集不在代码许可覆盖范围内，也不进公开仓库——它们是商业资产，授权线单独走（见待定问题 1）。
+
 ## 安全边界
 
 - Renderer 使用严格 CSP，禁止远程脚本、远程页面、任意导航和新窗口。
