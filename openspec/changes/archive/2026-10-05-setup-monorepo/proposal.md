@@ -13,6 +13,8 @@
 - **BREAKING** 静态检查入口移到根：把 `apps/electron/eslint.config.mjs` 原样平移到根（规则集合不变），删除包内那份与包内 eslint 相关依赖，`lint` 不再是 turbo 任务。
 - 删除根目录失效配置：`tsconfig.json`（引用已不存在的 node/web 配置）与 `playwright.config.ts`（`testDir: ./e2e` 已不存在）。
 - 格式化沿用根已有的 `.prettierrc`，新增 `.prettierignore`。
+- 建立 uv 管理的 FastAPI 健康接口、OpenAPI 导出、基础测试、API 镜像与 Compose，并提供根 API 启动和检查入口。
+- 清除客户端模板业务与多平台残留，保留安全窗口配置、Astryx 主题管线与 macOS 标识；客户端业务和完整服务部署由 v1 后续 change 实现。
 
 ## Capabilities
 
@@ -29,6 +31,6 @@
 
 配置：`pnpm-workspace.yaml`、`turbo.json`、根与 `apps/electron` 的 `package.json`、根 `eslint.config.mjs`、`apps/electron/electron-builder.yml`、`.gitignore`、`.prettierignore`。
 
-依赖：根新增 turbo 2.11.5，并承接从包内上移的静态检查工具链（eslint、`@electron-toolkit/eslint-config-ts`、`@electron-toolkit/eslint-config-prettier`、eslint-plugin-react/react-hooks/react-refresh、typescript）与 prettier；已执行 `pnpm install`，`pnpm-lock.yaml` 按 workspace 结构重建。`pnpm-workspace.yaml` 只保留真正会跑构建脚本的两条许可（`electron`、`esbuild`），删掉零命中的旧条目、无差别的 `electron-winstaller: false` 与未启用的 `minimumReleaseAgeExclude` 列表；`overrides: '@electron/get': 5.1.0` 经实测仍在依赖树里，保留。
+依赖：根承接 turbo 与静态检查工具链，应用依赖留在客户端包，Python 使用独立 `uv.lock`。构建许可批准 Electron 与 esbuild，并显式禁用 electron-winstaller 与 Astryx core 的非必要安装脚本；保留已验证的 `@electron/get` override。
 
-未包含：客户端问答实现、官网子包内容、`services/api` 实现——这些不属于结构范围。
+未包含：账号、知识库、RAG、客户端业务、官网内容与生产发布。未完成事项保留在 tasks，并按 [v1 实施计划](../../../v1-plan.md) 迁移到后续 change；不将迁移等同于实现完成。

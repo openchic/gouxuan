@@ -1,3 +1,7 @@
+## Purpose
+
+统一钩玄的仓库、应用与桌面分发标识，将用户可见的中文名称和签名、公证所需的 ASCII 产物路径分开管理，并仅声明已支持的 macOS 分发及手动更新方式，便于后续发布验收。
+
 ## ADDED Requirements
 
 ### Requirement: 标识统一
@@ -21,7 +25,7 @@
 #### Scenario: 生成 macOS 产物
 
 - **WHEN** 执行 `pnpm package:mac`
-- **THEN** DMG 与 ZIP 文件名为 `Gouxuan-<version>.<ext>`，不含斜杠与非 ASCII 字符
+- **THEN** DMG 文件名为 `Gouxuan-<version>.dmg`，ZIP 文件名以 `Gouxuan-<version>` 开头且允许包含架构与平台后缀，两者均不含斜杠与非 ASCII 字符
 
 #### Scenario: 桌面显示名
 

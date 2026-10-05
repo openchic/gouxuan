@@ -53,11 +53,13 @@
 
 ## 5. 归属后续 change
 
+归档时保留 10 个未完成条目的状态。具体迁移范围见 [v1 实施计划](../../../v1-plan.md)，客户端主题以浅色、深色、跟随系统三种模式为准；迁移后的验收分别在 `build-qa-client` 与 `prepare-v1-release` 执行。5.3 和 5.4 保留为可选工具链维护，不阻断 v1。
+
 - [ ] 5.1 服务落地时一起建：`services/api/Dockerfile` 与 `.dockerignore`、根 `compose.yml` 与 `compose.override.yml`、`.github/workflows/{client,api}.yml`（`paths` 过滤 + `openapi.json` diff 门禁 + `docker build`），并加根脚本 `dev:api` 与 `check:api`
 - [ ] 5.2 客户端契约与安全剩余项：Preload 类型化白名单（`build-qa-client`，落地时 `@electron-toolkit/preload` 依赖退场，需要动 lockfile）；renderer CSP 里 `style-src 'unsafe-inline'` 的收紧与 main 侧响应头；entitlements 已收窄到只留 `allow-jit` 并实测签名应用可起，公证仍未做
 - [ ] 5.5 图标资产：`build/icon.icns` 转出 png 确认仍是 Electron 原子 logo，已随 zip 进包；没有钩玄图标前不删（删了 electron-builder 会退成默认图标，等于没解决）
 - [ ] 5.6 Astryx 目前只落了主题与样式管线（`<Theme>` + 三段 CSS），一个组件都还没用；`@ag-ui/core` 1.0.1 未装——它的第一批消费者是 Preload 事件白名单与 Main 的运行时，随 `build-qa-client` 同一轮引入，不提前挂空依赖
-- [ ] 5.7 固定浅色要显式落地：Astryx token 写成 `light-dark()`，不在根上锁 `color-scheme: light` 就会跟随系统（实测 neutral 主题下的计算样式里全是 `light-dark(...)`）
+- [ ] 5.7 主题支持浅色、深色与跟随系统，默认跟随系统；随 `build-qa-client` 接入设置入口、按账号保存的偏好、Main `nativeTheme.themeSource` 与 Astryx `Theme mode`。验证切换立即生效、系统变化实时跟随、固定模式不受系统变化影响、重启及账号切换正确恢复，页面与原生界面配色一致且启动不闪烁；该项尚未实现。
 - [ ] 5.8 契约类型生成留到客户端真调接口那一轮：曾在本 change 试装 `openapi-typescript` 并生成 `apps/electron/src/shared/api-types.d.ts`（实测可用、反向验证过漂移可见），按"没有调用方就不建生成物与门禁"撤掉；`build-qa-client` 里连同类型消费与 CI 门禁一起落地
 - [ ] 5.3 `shamefully-hoist` 的移除与逐包依赖验证
 - [ ] 5.4 若确实需要阻止 npm/yarn 执行根脚本，另行选择 corepack 或安装守卫

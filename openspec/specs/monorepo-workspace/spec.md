@@ -1,4 +1,10 @@
-## ADDED Requirements
+# monorepo-workspace Specification
+
+## Purpose
+
+统一桌面客户端、静态官网与独立 Python 服务的工程边界，使应用能够通过根命令构建和检查，并明确依赖、配置与锁文件归属，避免子项目依赖未声明的提升结果或重复配置。
+
+## Requirements
 
 ### Requirement: workspace 成员
 
@@ -16,7 +22,7 @@
 
 ### Requirement: 任务编排分层
 
-构建、类型检查与打包任务 MUST 在根 `turbo.json` 定义，具体命令实现在各子包自己的脚本中；根 `package.json` 的脚本只允许转发到 turbo、ESLint 或 prettier，不重复实现子包构建步骤。静态检查 MUST 作为单个根任务执行，不拆成 per-package 的 turbo 任务。
+JS 构建、类型检查与打包任务 MUST 在根 `turbo.json` 定义，具体命令实现在各子包自己的脚本中；根 `package.json` 转发 JS 任务与共享检查，并通过独立入口编排 Python 检查及服务启动，不重复实现子包构建步骤。JS 静态检查 MUST 作为单个根任务执行，不拆成 per-package 的 turbo 任务。
 
 #### Scenario: 根命令构建全部子包
 
@@ -36,7 +42,7 @@
 #### Scenario: 缓存可复现
 
 - **WHEN** 子包的 `build` 与 `typecheck` 结果被 turbo 缓存
-- **THEN** 源码与配置未变化时第二次执行直接命中缓存，`dev`、`start` 与 `build:mac` 不写入缓存
+- **THEN** 源码与配置未变化时第二次执行直接命中缓存，`dev` 与 `build:mac` 不写入缓存
 
 ### Requirement: 依赖与配置归属
 

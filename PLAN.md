@@ -145,7 +145,15 @@ v1 使用邮箱标识与密码登录，账号由管理员通过受控服务端 C
 - 对话区展示检索进度与流式正文，区分生成中、核验中和已完成，支持停止与重跑最新一轮；重跑期间保留原回答并展示新候选，最终正文与引用以服务端校验结果为准。
 - 回答下方展示引用片段与出处，可以展开查看原文定位和资料版本。
 - 登录状态、运行限制、服务不可达、断线恢复和离线历史查看具有明确界面状态。
-- 固定浅色主题，根节点设置 `color-scheme: light`；不使用渐变，圆角 6–8px，列表保持桌面工具密度。
+- 支持浅色、深色和跟随系统三种主题，默认跟随系统；不使用渐变，圆角 6–8px，列表保持桌面工具密度。
+
+### 主题与外观
+
+- 设置中的外观选项提供「浅色」「深色」「跟随系统」，切换立即生效；跟随系统时，系统外观变化自动更新界面，无需重启。
+- Main 将主题偏好作为当前账号的本地界面设置保存，重启和重新登录后恢复；无登录账号时使用跟随系统，切换账号时加载对应账号的偏好。主题设置不依赖服务端，离线也可修改。
+- Main 根据偏好设置 Electron [`nativeTheme.themeSource`](https://www.electronjs.org/docs/latest/api/native-theme)，使原生界面与网页配色一致。Renderer 通过类型化 Preload 读取、更新和订阅主题偏好，根 Astryx `Theme` 使用同一 `mode`（`light`、`dark` 或 `system`），由其同步根节点与 `color-scheme`，不额外引入主题库或复制颜色表。
+- 页面、对话、引用、弹层和自定义样式统一使用 Astryx 语义 token，覆盖正文、背景、边框与状态颜色；原生滚动条、表单和窗口背景与当前主题一致。窗口显示前恢复并应用偏好，避免深色启动时闪现浅色背景。
+- 验收覆盖三种模式切换、系统外观实时变化、重启恢复与账号切换；浅色或深色模式不随系统变化，切换主题不重建会话、不丢失草稿、不打断运行。
 
 ### 页面路由
 
@@ -157,7 +165,7 @@ Renderer 使用 [TanStack Router](https://tanstack.com/router/latest/docs/overvi
 | `/login`                | 独立登录页；登录成功后进入当前账号的会话界面                   |
 | `/chat`                 | 新建会话草稿；首次提交由服务端确认后，替换为返回的会话详情路由 |
 | `/chat/$conversationId` | 指定会话的历史与当前运行，参数作为当前选中会话的唯一依据       |
-| `/settings`             | 账号、界面偏好与管理员知识库菜单                               |
+| `/settings`             | 账号、主题与界面偏好、管理员知识库菜单                         |
 | `/settings/knowledge`   | 管理员知识库管理；上传、任务状态、失败重试、审核、发布与回滚   |
 
 - 登录后的页面共用应用布局，保留左侧 `SideNav`，右侧通过 `Outlet` 展示当前页面。导航使用路由的 `Link` 与导航 API，列表选中状态由路由派生。
@@ -389,7 +397,7 @@ v1 的计费接入点就是现有运行创建、终态处理和用量记录函�
 
 pnpm 11.9.0 workspace（`apps/*`）+ turbo 2.11.5；`services/api` 用 uv 独立管理。
 
-根目录负责任务编排，业务代码按应用组织。
+根目录负责 workspace、任务编排、共享检查配置与 Compose；应用专属的构建与运行配置放在各自目录，业务代码按应用组织。
 
 | 路径            | 标识                | 角色                | 工具链                      | 属于 workspace |
 | --------------- | ------------------- | ------------------- | --------------------------- | -------------- |
@@ -397,11 +405,50 @@ pnpm 11.9.0 workspace（`apps/*`）+ turbo 2.11.5；`services/api` 用 uv 独立
 | `apps/site`     | `@gouxuan/site`     | 产品官网            | Vite、React                 | 是             |
 | `services/api`  | `gouxuan-api`       | RAG 问答与语料服务  | Python、FastAPI、uv、Docker | 否             |
 
-`apps/site` 使用 Vite + React 19 + Astryx，与客户端共用同一套 token、组件和 StyleX 样式管线，产物纯静态。v1 内容包含产品介绍、能力与咨询范围、下载、使用说明及 FAQ。
+`apps/site` 使用 Vite + React 19 + Astryx，与客户端通过相同依赖共用 token、组件和 StyleX 样式管线，产物纯静态。v1 内容包含产品介绍、能力与咨询范围、下载、使用说明及 FAQ。项目自有组件产生实际复用后，再提取 `packages/ui` 并接入 workspace。
+
+### 客户端目录
+
+保留 Main、Preload 与 Renderer 的进程边界，业务代码按下列目标结构组织；目录与文件随实际功能落地创建。
+
+```text
+apps/electron/src/
+|-- main/
+|   |-- index.ts                  应用启动与模块组装
+|   |-- auth.ts                   登录生命周期与凭据
+|   |-- request.ts                HTTP 客户端与认证拦截器
+|   |-- stream.ts                 SSE 订阅、重连与事件转发
+|   |-- cache.ts                  SQLite、草稿与偏好
+|   `-- ipc.ts                    IPC 注册、sender 与参数校验
+|-- preload/
+|   `-- index.ts                  类型化白名单桥接
+|-- shared/
+|   |-- api.generated.ts          从服务端 OpenAPI 生成的 HTTP 类型
+|   |-- ipc.ts                    桥接方法与参数、返回结构
+|   |-- events.ts                 公共事件契约
+|   `-- errors.ts                 跨 IPC 的错误结构
+`-- renderer/
+    |-- index.html
+    `-- src/
+        |-- routes/               路由声明、布局、守卫与 loader
+        |-- pages/
+        |   |-- Login/
+        |   |-- Chat/
+        |   |-- Settings/
+        |   `-- Knowledge/
+        |-- components/           跨页面共享组件
+        |-- hooks/                跨页面共享 hooks
+        |-- App.tsx
+        |-- main.tsx
+        `-- styles.css
+```
+
+- `shared/` 只放浏览器兼容的契约类型与校验定义，Main、Preload 和 Renderer 均可引用；HTTP 类型从 `services/api/openapi.json` 生成。业务实现放在所属进程内，Renderer 通过 Preload 访问 Main。
+- 页面模块以主组件命名，页面私有组件和 hooks 放在该模块的 `components/` 与 `hooks/`；页面 `api.ts` 只封装 Preload 调用，HTTP 请求由 Main 执行。`routes/` 负责路由入口，页面业务保留在 `pages/`。
 
 ### 服务端目录
 
-应用代码位于 `app/`，先按业务职责组织为少量文件；文件内部用函数和数据模型分工，代码规模需要时再拆为包。
+应用代码位于 `app/`，先按业务职责组织为少量文件；文件内部用函数和数据模型分工，代码规模需要时再拆为包。`app/api/` 负责 HTTP 参数、响应和业务入口调用，流程放在对应业务模块，`models.py` 只定义 SQLAlchemy ORM 模型。Pydantic 请求与响应结构先跟随对应接口模块，出现实际复用后再提取。
 
 ```
 services/api/
@@ -422,17 +469,21 @@ services/api/
 │   ├─ objects.py                  私有文件存储
 │   ├─ admin_cli.py   openapi.py    账号初始化与契约导出
 │   └─ api/
-│   │   ├─ health.py   auth.py     健康状态与账号接口
-│   │   ├─ conversations.py        会话、缓存 ID 核对与引用来源
-│   │   ├─ runs.py                 问答提交、事件、状态与取消
-│   │   └─ knowledge.py            资料上传、处理、审核与发布
+│       ├─ health.py   auth.py     健康状态与账号接口
+│       ├─ conversations.py        会话、缓存 ID 核对与引用来源
+│       ├─ runs.py                 问答提交、事件、状态与取消
+│       └─ knowledge.py            资料上传、处理、审核与发布
 ├─ migrations/                     Alembic 迁移脚本
-├─ tests/                          小样本 fixture 与关键业务验证
+├─ tests/                          关键业务验证
+│   └─ fixtures/                   可公开、不含私有资料的小样本
 ├─ eval/
-│   ├─ golden.yaml                 私有评测集的本地副本，不进公开仓库
 │   └─ run.py                      复用问答流程的固定样本评测
-└─ data/                           本地临时产物，不进 git
+└─ data/                           私有资料本地副本与临时产物，不进 git
+    └─ eval/
+        └─ golden.yaml             私有评测集的本地副本
 ```
+
+评测执行逻辑复用 `app/` 中的业务流程，`eval/run.py` 作为脚本入口。私有 golden 集仍以私有存储中的版本为准，本地副本统一放在已忽略的 `data/` 中。
 
 ### 部署形态
 
@@ -535,6 +586,7 @@ CI 覆盖 Postgres / pgvector 集成测试与迁移检查，问答发布使用�
 - CI 按源码、共享配置与契约依赖触发；`openapi.json`、生成类型与代码不同步时 CI 失败。
 - 应用图标、窗口标题与 macOS 显示名使用钩玄标识，`appId`、用户数据目录与 ASCII 产物名符合发布约定。
 - 客户端使用左右布局并统一调用服务端，不提供模型配置，不直接连接模型供应商。
+- 设置支持浅色、深色与跟随系统三种主题，默认跟随系统；偏好按账号保存、离线可修改，切换与系统变化实时生效，重启恢复正确且不打断问答。
 - 打包后的 Hash 路由支持刷新、前进与后退；恢复路径按账号隔离，切换页面不取消运行或串入其他会话事件。
 - 普通 HTTP 与 SSE 共用 Main 认证入口；并发续期只执行一次，重试保留幂等键，网络错误保留登录状态，旧续期结果不恢复已退出的会话。
 - Postgres / pgvector 保存主数据，业务表与检索表可通过 Alembic 迁移。
