@@ -14,7 +14,7 @@ export default defineConfig(
     settings: {
       react: {
         // react 装在子包内，插件从根解析不到，'detect' 会退化为假设最新版
-        version: '19.2',
+        version: '19.3',
       },
     },
   },

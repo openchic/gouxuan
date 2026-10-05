@@ -10,15 +10,17 @@
     "build": "pnpm typecheck && electron-vite build",
     "build:mac": "electron-vite build && electron-builder --mac dmg zip",
     "dev": "electron-vite dev",
-    "postinstall": "electron-builder install-app-deps",
     "start": "electron-vite preview",
     "typecheck": "pnpm typecheck:node && pnpm typecheck:web",
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
     "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false"
   },
   "dependencies": {
+    "@astryxdesign/core": "^0.6.5",
+    "@astryxdesign/theme-neutral": "^0.6.5",
     "@electron-toolkit/preload": "^3.0.2",
-    "@electron-toolkit/utils": "^4.0.0"
+    "@electron-toolkit/utils": "^4.0.0",
+    "@stylexjs/stylex": "^0.19.1"
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^2.0.0",

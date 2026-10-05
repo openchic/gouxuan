@@ -1,6 +1,8 @@
 packages:
   - apps/*
 allowBuilds:
+  # core 的 postinstall 只打印一句 "run astryx init" 提示，不参与构建
+  '@astryxdesign/core': false
   electron: true
   electron-winstaller: false
   esbuild: true

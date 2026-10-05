@@ -13,10 +13,11 @@
   "scripts": {
     "build": "turbo run build",
     "check": "pnpm format:check && pnpm lint && turbo run typecheck",
-    "check:api": "uv --directory services/api run ruff check . && uv --directory services/api run pytest -q",
+    "check:api": "uv --directory services/api run ruff check . && uv --directory services/api run ruff format --check . && uv --directory services/api run pyright && uv --directory services/api run pytest -q && uv --directory services/api run python -m app.openapi | diff -q - services/api/openapi.json",
     "dev": "turbo run dev",
     "dev:api": "docker compose up api",
     "format": "prettier --write .",
+    "format:api": "uv --directory services/api run ruff check --fix . && uv --directory services/api run ruff format .",
     "format:check": "prettier --check .",
     "lint": "eslint .",
     "package:mac": "turbo run build:mac",
@@ -34,6 +35,10 @@
     ],
     "*.{json,yml,yaml,css,less,md}": [
       "prettier --write"
+    ],
+    "*.py": [
+      "uv run --project services/api ruff check --fix",
+      "uv run --project services/api ruff format"
     ]
   },
   "devDependencies": {

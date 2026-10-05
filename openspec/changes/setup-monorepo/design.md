@@ -1,6 +1,6 @@
 ## Context
 
-仓库现状：`apps/electron` 是刚生成的 electron-vite 模板骨架（三进程、无业务实现），旧的 Pi Agent、Astryx 界面与 SQLite 持久化代码已整体删除；根 `package.json` 仍描述旧单包应用，`pnpm-workspace.yaml` 只有 pnpm 设置项、没有 `packages`；`node_modules` 已清空，`pnpm-lock.yaml` 与新的包结构不一致。
+仓库现状：`apps/electron` 是刚生成的 electron-vite 模板骨架（三进程、无业务实现），旧产品的写作界面与运行时代码已整体删除；根 `package.json` 仍描述旧单包应用，`pnpm-workspace.yaml` 只有 pnpm 设置项、没有 `packages`；`node_modules` 已清空，`pnpm-lock.yaml` 与新的包结构不一致。
 
 本 change 只定结构与任务编排，不实现问答客户端、检索服务与官网内容。
 
@@ -14,9 +14,9 @@
 
 **Non-Goals**
 
-- 不创建 `apps/site`，官网技术选型与内容仍未定（PLAN.md 待定问题 5）。
-- 不创建 `services/api`；它计划以「只含 `scripts` 的 `package.json`」挂进同一 workspace，实施归 `add-knowledge-retrieval-service`。
-- 不改客户端业务代码：模板的 `sandbox: false`、缺失 CSP、`setAppUserModelId('com.electron')`、窗口标题与模板图标都属于后续客户端 change。
+- 不创建 `apps/site`，官网技术选型与内容仍未定（PLAN.md 待定问题）。
+- `services/api` 不进 pnpm workspace：它已在本 change 期间落地为 uv + Docker 的独立目录，跨语言只靠根 `compose.yml` 与 `openapi.json` 契约连接（PLAN.md 仓库结构节）。
+- 客户端只清模板残留、不写业务：三进程安全默认值与标识按 4.12 修，问答运行时与界面归 `build-qa-client`。
 - 不验证 DMG 与实机显示名，zip 打包已跑通。
 
 ## 结构
@@ -64,9 +64,11 @@ turbo 2.11.5，任务只定义在根，脚本实现留在包内：
 ## 依赖与配置归属
 
 - 静态检查工具链与配置只在根有一份：`eslint.config.mjs` 从 `apps/electron/` 原样上移，规则集合不变（`@electron-toolkit/eslint-config-ts` + react + react-hooks + react-refresh + prettier 关闭冲突规则），配套的 eslint 与插件依赖随之上移。新增子包不需要复制插件与版本。
-- `@electron-toolkit/tsconfig`、`utils`、`preload` 仍留在客户端包，它们被包内代码与 tsconfig 直接继承。
+- `@electron-toolkit/tsconfig`、`utils` 仍留在客户端包，被包内代码与 tsconfig 直接继承。`@electron-toolkit/preload` 在 4.12 清除全量 `ipcRenderer` 暴露后已无代码引用，但退掉它要改 lockfile，留到 Preload 类型化契约落地时一起处理。
 - `typescript` 在根与客户端包都声明同一个 `^5.9.3` range：根需要它满足 eslint ts 预设的 peer，包需要它跑 `tsc --noEmit`。重装后要确认 pnpm 解析成同一版本。
-- 应用运行时依赖（react、electron、vite、未来的 Pi/Astryx/SQLite）全部在包内声明，不依赖根安装顺带提供。旧的 `electron-builder install-app-deps` postinstall 已随应用依赖移到包内。
+- Astryx 三件套（`@astryxdesign/core`、`@astryxdesign/theme-neutral`、peer `@stylexjs/stylex`）在客户端包内声明，走预构建 CSS 而非 `@astryxdesign/build` 的 vite 插件：后者 peer 要 vite 8，本仓库被 electron-vite 5 钉在 vite 7。core 的 postinstall 只打印一句提示，`pnpm-workspace.yaml` 的 `allowBuilds` 因此显式写 `false`。
+- Python 侧的格式化只有 ruff 一个负责人：prettier 不认 `.py`/`.toml`/`uv.lock`（实测报 No parser），`openapi.json` 是 JSON 会被收，故进 `.prettierignore`；`[tool.ruff.format] quote-style = "single"` 让 Python 与 JS 共用同一套引号习惯。
+- 应用运行时依赖（react、electron、vite、未来的 Astryx/SQLite）全部在包内声明，不依赖根安装顺带提供。模板带的 `electron-builder install-app-deps` postinstall 已删：4.10 的 asar 审计里没有任何原生模块，这条是 no-op。
 - `tsconfig` 留在包内：main/preload 与 renderer 分属 node 与 dom 两套 lib 和 globals，客户端包的三件套是 electron-vite 的约定；收到根上只会变成根 project 引用再绕回包内。
 - prettier 配置沿用仓库根已有的 `.prettierrc`（`semi: false`、`singleQuote: true`、`tabWidth: 2`、`trailingComma: "es5"`、`arrowParens: "avoid"`）。实测第一次 `pnpm format` 按它重写了 20 个文件：给对象与数组补尾逗号、把 `(details) =>` 收成 `details =>`。模板源码 0 条带分号语句、最长行 80，与 `semi: false` 一致。
 - Playwright 配置跟随 e2e 用例放在客户端包内；现在没有用例，所以没有配置文件。
@@ -92,16 +94,13 @@ turbo 2.11.5，任务只定义在根，脚本实现留在包内：
 
 ## Risks / Trade-offs
 
-- **打包只验了一半**：zip 产物、`Info.plist` 标识与 asar 内容已实测；DMG 没跑（需要 dmg 工具链，当时 npm 镜像 DNS 不可达），签名与公证也没验（本机无证书，用 `CSC_IDENTITY_AUTO_DISCOVERY=false` 跳过）。访达与菜单栏的中文显示名仍属未证实。
-- **`pnpm-lock.yaml` 与新结构不一致**：它仍描述旧单包的依赖树，重新安装前 `--frozen-lockfile` 一定失败。
-- **模板安全默认值与 PLAN.md 冲突**：`src/main/index.ts` 里 `sandbox: false`、`webContents` 允许 `shell.openExternal`、窗口无标题与 `setAppUserModelId('com.electron')`，与「sandbox + contextIsolation + 严格 CSP」的安全边界相反。CSP 只在 `src/renderer/index.html` 的 meta 里存在一条，且允许 `style-src 'unsafe-inline'`，main 侧没有响应头加固。这些是客户端实现内容，已在 tasks 里点名归属，但不在本 change 修。
-- **图标仍是模板 Electron 图标**：`build/icon.*` 与 `resources/icon.png` 需要在发布前换成钩玄图标。
-- **调试配置路径失效**：`apps/electron/.vscode/launch.json` 用 `${workspaceRoot}/node_modules/.bin/electron-vite` 定位可执行文件，workspace 布局下该工具装在包内目录；这份包内 `.vscode` 与仓库根的编辑器配置也会互相顶替。归属客户端 change 处理。
-- **依赖版本回退**：模板给的是 electron 39、vite 7、react 19.2，与旧实现的 electron 43、vite 8 不同；重新接入 Pi 与 Astryx 时按新范围验证兼容性，不假设旧版本行为。
+- **打包验了一半，公证没做**：zip 与 DMG 产物、`Info.plist` 标识、asar 内容、hardened runtime 签名（本机 `Apple Development` 证书）与只留 `allow-jit` 的 entitlements 都已实测，签名后的应用能起。未验的是公证与访达/菜单栏显示名（需要装一次真机）。
+- **客户端安全只剩三项未收**：模板的 `sandbox: false`、`shell.openExternal`、全量 `ipcRenderer` 暴露与旧标识已在 4.12 清除；剩下 CSP 的 `style-src 'unsafe-inline'` 收紧、main 侧响应头，以及 `build/entitlements.mac.plist` 收窄到只留 `allow-jit` 后是否影响签名公证——三项都要真机验，归 `build-qa-client` 与 `prepare-v1-release`。
+- **图标仍是模板 Electron 图标**：`build/icon.icns` 转出 png 确认为 Electron 原子 logo，已随 zip 进包；`build/icon.{ico,png}` 与 `resources/icon.png` 已删（分别服务已删的 windows/linux 段），换图标需要钩玄的图标资产。
+- **依赖版本回退**：模板给的是 electron 39、vite 7、react 19.2，与旧实现的 electron 43、vite 8 不同；接入 Astryx 时按新范围验证兼容性，不假设旧版本行为。
 
 ## Open Questions
 
 - 官网子包用 Vite React 还是 Astro，是否随本 change 一起建壳。
 - `shamefully-hoist` 何时移除、以什么验证结果移除。
 - 是否需要恢复 Windows/Linux 打包段。
-- 许可证与 `LICENSE` 的版权方写法（当前是 `openvain`，仓库已迁到 `openchic` 组织）。

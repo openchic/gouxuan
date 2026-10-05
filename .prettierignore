@@ -2,4 +2,4 @@ out
 dist
 release
 pnpm-lock.yaml
-apps/electron/resources
+services/api/openapi.json

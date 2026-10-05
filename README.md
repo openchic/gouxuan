@@ -21,7 +21,9 @@ pnpm dev:api     # 检索服务（docker compose up api）
 pnpm build       # turbo 构建全部 JS 子包
 pnpm lint        # 根 eslint 配置覆盖 apps/**
 pnpm check       # prettier 检查 + eslint + turbo run typecheck
-pnpm check:api   # 检索服务的 ruff 与 pytest
+pnpm check:api   # 检索服务：ruff check + ruff format --check + pyright + pytest + openapi 契约 diff
+pnpm format      # prettier 写模式（不碰 .py/.toml/uv.lock）
+pnpm format:api  # ruff --fix + ruff format
 pnpm package:mac # 构建 macOS 安装包
 ```
 

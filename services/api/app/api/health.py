@@ -6,15 +6,15 @@ from app.settings import settings
 router = APIRouter()
 
 
-@router.get("/healthz")
+@router.get('/healthz')
 def healthz() -> dict[str, str]:
-    return {"status": "ok"}
+    return {'status': 'ok'}
 
 
-@router.get("/readyz")
+@router.get('/readyz')
 def readyz() -> JSONResponse:
     ready = settings.index_path.exists()
     return JSONResponse(
         status_code=200 if ready else 503,
-        content={"status": "ready" if ready else "index_missing"},
+        content={'status': 'ready' if ready else 'index_missing'},
     )
