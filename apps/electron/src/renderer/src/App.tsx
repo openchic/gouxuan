@@ -1,12 +1,12 @@
-import { Theme } from '@astryxdesign/core/theme'
-import { neutralTheme } from '@astryxdesign/theme-neutral/built'
+import type { ThemePreference } from '../../shared/ipc'
+import { RouterProvider } from '@tanstack/react-router'
+import { WorkspaceProvider } from './components'
+import { router } from './router'
 
-function App(): React.JSX.Element {
-  return (
-    <Theme theme={neutralTheme}>
-      <main>钩玄</main>
-    </Theme>
-  )
-}
-
-export default App
+type AppProps = { initialTheme: ThemePreference }
+export const App = ({ initialTheme }: AppProps): React.JSX.Element => (
+  <WorkspaceProvider initialTheme={initialTheme}>
+    <RouterProvider router={router} />
+  </WorkspaceProvider>
+)
+App.displayName = 'App'

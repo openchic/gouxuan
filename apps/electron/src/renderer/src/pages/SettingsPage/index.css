@@ -1,0 +1,76 @@
+.settings-page-header {
+  margin-bottom: 36px;
+}
+.settings-page-header h1 {
+  font-size: 22px;
+  font-weight: 600;
+}
+.general-settings {
+  max-width: 760px;
+}
+.settings-section + .settings-section {
+  margin-top: 32px;
+  border-top: 1px solid var(--color-border);
+  padding-top: 28px;
+}
+.settings-section-title h2 {
+  font-size: 14px;
+  font-weight: 600;
+}
+.appearance-row,
+.setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 20px;
+}
+.appearance-row h3,
+.setting-row h3 {
+  font-size: 13px;
+  font-weight: 500;
+}
+.appearance-row p,
+.setting-row p {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin-top: 4px;
+}
+.setting-caption {
+  font-size: 12px;
+  color: var(--color-text-secondary);
+  margin-top: 12px;
+}
+.setting-caption:empty {
+  display: none;
+}
+.settings-section .inline-error {
+  margin-top: 12px;
+}
+.setting-account {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.settings-login-link {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 12px;
+}
+.settings-login-link:hover {
+  text-decoration: underline;
+}
+.setting-avatar {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border: 1px solid var(--color-border-emphasized);
+  background: var(--color-background-surface);
+  border-radius: 7px;
+  font-size: 12px;
+  color: var(--color-text-secondary);
+}

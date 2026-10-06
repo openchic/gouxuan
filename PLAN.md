@@ -142,6 +142,7 @@ v1 使用邮箱标识与密码登录，账号由管理员通过受控服务端 C
 ### 界面
 
 - 左侧 `SideNav` 提供新建会话与最近会话列表，右侧展示对话列表与输入框，复用 Astryx 的对话、流式 Markdown 和引用组件。
+- 设置使用独立两栏布局，左侧为通用设置与管理员知识库菜单，右侧显示对应页面；提供返回问答入口，切换页面保留草稿。
 - 对话区展示检索进度与流式正文，区分生成中、核验中和已完成，支持停止与重跑最新一轮；重跑期间保留原回答并展示新候选，最终正文与引用以服务端校验结果为准。
 - 回答下方展示引用片段与出处，可以展开查看原文定位和资料版本。
 - 登录状态、运行限制、服务不可达、断线恢复和离线历史查看具有明确界面状态。
@@ -432,10 +433,10 @@ apps/electron/src/
     `-- src/
         |-- routes/               路由声明、布局、守卫与 loader
         |-- pages/
-        |   |-- Login/
-        |   |-- Chat/
-        |   |-- Settings/
-        |   `-- Knowledge/
+        |   |-- LoginPage/
+        |   |-- ChatPage/
+        |   |-- SettingsPage/
+        |   `-- KnowledgePage/
         |-- components/           跨页面共享组件
         |-- hooks/                跨页面共享 hooks
         |-- App.tsx
@@ -445,6 +446,7 @@ apps/electron/src/
 
 - `shared/` 只放浏览器兼容的契约类型与校验定义，Main、Preload 和 Renderer 均可引用；HTTP 类型从 `services/api/openapi.json` 生成。业务实现放在所属进程内，Renderer 通过 Preload 访问 Main。
 - 页面模块以主组件命名，页面私有组件和 hooks 放在该模块的 `components/` 与 `hooks/`；页面 `api.ts` 只封装 Preload 调用，HTTP 请求由 Main 执行。`routes/` 负责路由入口，页面业务保留在 `pages/`。
+- 有独立界面的页面和组件采用 `组件名/index.tsx` 与同目录 `index.css`，由组件直接引入自己的样式；共享样式由实际复用的共享组件持有，根 CSS 只保留主题、reset 和基础规则。纯状态 Provider 与路由适配组件不创建空 CSS，页面不依赖其他页面加载样式。
 
 ### 服务端目录
 

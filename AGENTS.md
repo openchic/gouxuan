@@ -2,6 +2,11 @@
 
 `PLAN.md` 描述总体目标
 
+## React 前端目录
+
+- 页面和组件目录与主组件同名，有独立界面的模块使用 `index.tsx` 与同目录 `index.css`，由组件直接引入样式。页面私有组件和 hooks 留在页面模块内，共享组件和 hooks 通过 `index.ts` 统一导出。
+- 根 CSS 只保留主题、reset 和基础规则；共享样式归实际复用的共享组件，页面不得依赖其他页面加载 CSS。纯状态 Provider 和无独立 DOM 的路由适配组件不创建空样式文件。
+
 ## openspec 规则
 
 - 除非用户明确要求，不要将后续需求混入当前 change。后续改动默认归入当前相关且尚未归档的 change；只有用户明确要求新建 change，或当前 change 无关或已归档时，才创建新的 change。创建新 change 前，先归档其他尚未归档的 change。

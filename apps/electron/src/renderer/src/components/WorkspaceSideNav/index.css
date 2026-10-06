@@ -1,0 +1,18 @@
+.workspace-sidebar {
+  flex: 0 0 246px;
+  width: 246px;
+  min-width: 246px;
+  background: var(--color-background-body);
+  border-right: 1px solid var(--color-border);
+}
+.workspace-sidebar > :first-child {
+  padding: calc(24px + var(--window-controls-inset, 0px)) 18px 16px;
+}
+
+@media (max-width: 1100px) {
+  .workspace-sidebar {
+    flex-basis: 220px;
+    width: 220px;
+    min-width: 220px;
+  }
+}

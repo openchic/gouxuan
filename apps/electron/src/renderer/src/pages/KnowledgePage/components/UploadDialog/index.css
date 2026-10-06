@@ -1,0 +1,56 @@
+.upload-form {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 20px;
+}
+.upload-file-picker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  border: 1px dashed var(--color-border-emphasized);
+  border-radius: 7px;
+}
+.upload-file-picker > div {
+  flex: 1;
+  min-width: 0;
+}
+.upload-file-picker strong {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.upload-file-picker p {
+  font-size: 10px;
+  margin-top: 4px;
+  color: var(--color-text-secondary);
+}
+.upload-form-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.upload-native-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.upload-native-field select {
+  color: var(--color-text-primary);
+  background: var(--color-background-card);
+  border: 1px solid var(--color-border-emphasized);
+  border-radius: 6px;
+  height: 34px;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 400;
+}
+.upload-caption {
+  color: var(--color-text-secondary);
+  font-size: 11px;
+  line-height: 1.8;
+}

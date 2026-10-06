@@ -3,3 +3,4 @@ dist
 release
 pnpm-lock.yaml
 services/api/openapi.json
+apps/electron/src/renderer/src/routeTree.gen.ts

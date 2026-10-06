@@ -31,6 +31,8 @@ pnpm package:mac # 构建 macOS 安装包
 
 单个子包：`pnpm --filter @gouxuan/electron dev`。检索服务：`pnpm dev:api`。
 
+客户端当前可独立预览登录、问答、设置和知识库界面，支持本地三态主题。会话与资料使用明确标记的虚构样例，草稿仅在当前窗口内保留；登录、问答和知识库服务尚未接入。
+
 ## 许可
 
 - 代码（本仓库全部内容）：AGPL-3.0-only，见 [LICENSE](LICENSE)。分发桌面端或基于本仓库提供服务时，需按 AGPL 提供对应源码。Copyright (C) 2026 openchic。
