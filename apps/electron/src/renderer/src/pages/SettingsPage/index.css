@@ -48,6 +48,9 @@
 .settings-section .inline-error {
   margin-top: 12px;
 }
+.settings-about-section .setting-row {
+  margin-top: 0;
+}
 .setting-account {
   display: flex;
   align-items: center;

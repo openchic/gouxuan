@@ -6,6 +6,9 @@
   "license": "AGPL-3.0-only",
   "author": "openchic",
   "packageManager": "pnpm@11.9.0",
+  "astryx": {
+    "theme": "neutral"
+  },
   "engines": {
     "node": ">=22.19.0",
     "pnpm": ">=11.9.0"
@@ -42,10 +45,14 @@
     ]
   },
   "devDependencies": {
+    "@astryxdesign/cli": "^0.6.5",
+    "@astryxdesign/core": "^0.6.5",
+    "@astryxdesign/theme-neutral": "^0.6.5",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@electron-toolkit/eslint-config-prettier": "^3.0.0",
     "@electron-toolkit/eslint-config-ts": "^3.1.0",
+    "@stylexjs/stylex": "^0.19.1",
     "eslint": "^9.39.1",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
@@ -53,6 +60,8 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.1.4",
     "prettier": "^3.7.4",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "turbo": "2.11.5",
     "typescript": "^5.9.3"
   }

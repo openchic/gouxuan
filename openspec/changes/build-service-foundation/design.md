@@ -1,6 +1,6 @@
 ## Context
 
-API 当前只有健康接口，`settings.index_path` 和 `/readyz` 用本地文件判断可用；现有 Compose 只有 API。目录与技术选型遵循 [PLAN.md](../../../PLAN.md)，动机见 proposal。
+服务基础从仅有健康接口及本地索引判断的骨架接入真实存储。当前已有数据库连接、Compose 和认证实现草稿，尚未完成完整基础设施验收。目录与技术选型遵循 [PLAN.md](../../../PLAN.md)，表的当前实施范围见 [DATABASE.md](../../../DATABASE.md)。
 
 ## Goals / Non-Goals
 
@@ -15,6 +15,8 @@ API 当前只有健康接口，`settings.index_path` 和 `/readyz` 用本地文�
 使用 Postgres / pgvector、SQLAlchemy 2.x 异步引擎及 psycopg 3，Alembic 管理扩展、表和索引。引擎与会话边界在 `app/database.py`，ORM 定义按实际使用进入 `models.py`。每次业务操作显式事务，不在网络或模型调用期间持有事务；不混用额外数据库连接池。
 
 不单独部署向量数据库，避免业务版本与向量版本分开提交。v1 使用精确向量检索；实际索引表由资料 change 创建。
+
+基础能力按实际消费者接入。当前登录功能先使用 Postgres 连接、Alembic 与认证三表迁移，不依赖对象存储或向量检索。pgvector 扩展在知识库实际接入时安装；私有存储在资料操作接入前验收。后续业务表随对应 change 开发时创建，基础 change 不预建业务表占位。
 
 ### 存储与启动
 

@@ -1,0 +1,43 @@
+.knowledge-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 24px 0 16px;
+}
+.knowledge-filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.knowledge-filter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.knowledge-filter.is-active,
+.knowledge-filter:hover {
+  background: var(--color-background-muted);
+  color: var(--color-text-primary);
+}
+.knowledge-filter.is-active {
+  font-weight: 600;
+}
+.knowledge-filter > span {
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-secondary);
+}
+.knowledge-search {
+  width: 220px;
+  max-width: 100%;
+}

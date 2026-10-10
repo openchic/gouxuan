@@ -1,7 +1,8 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
+from sqlalchemy.exc import SQLAlchemyError
 
-from app.settings import settings
+from app.database import check_database
 
 router = APIRouter()
 
@@ -12,9 +13,11 @@ def healthz() -> dict[str, str]:
 
 
 @router.get('/readyz')
-def readyz() -> JSONResponse:
-    ready = settings.index_path.exists()
+async def readyz() -> JSONResponse:
+    try:
+        await check_database()
+    except (SQLAlchemyError, RuntimeError):
+        return JSONResponse(status_code=503, content={'status': 'database_not_ready'})
     return JSONResponse(
-        status_code=200 if ready else 503,
-        content={'status': 'ready' if ready else 'index_missing'},
+        content={'status': 'ready'},
     )

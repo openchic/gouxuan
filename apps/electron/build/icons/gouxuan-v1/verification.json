@@ -1,0 +1,172 @@
+{
+  "source": "source/app-icon.svg",
+  "sourceSha256": "d021e1b285864ac4d61141e6be48d5cb4a913c9bc6bd5a1310809c3f50bdb7f5",
+  "foregroundColor": "#1b1b1b",
+  "backgroundColor": "#ffffff",
+  "icnsRepresentations": [
+    "ic12",
+    "ic07",
+    "ic13",
+    "ic08",
+    "ic04",
+    "ic14",
+    "ic09",
+    "ic05",
+    "ic10",
+    "ic11",
+    "info"
+  ],
+  "pngs": [
+    {
+      "file": "app-icon-1024.png",
+      "width": 1024,
+      "height": 1024,
+      "density": 72,
+      "kind": "full-bleed",
+      "transparentPixels": 0,
+      "solidMarkPixels": 128196,
+      "sha256": "cda365a420f66376c3314edf0131c67d7b8552250879556db51a8c21e9f97717"
+    },
+    {
+      "file": "foreground-1024.png",
+      "width": 1024,
+      "height": 1024,
+      "density": 72,
+      "kind": "foreground",
+      "transparentPixels": 916613,
+      "solidMarkPixels": 128196,
+      "sha256": "b6dadf2d74203fdd0e5b85318397565c510ffe275ac54ea42d77a4f2afb8da26"
+    },
+    {
+      "file": "app-icon-macos-1024.png",
+      "width": 1024,
+      "height": 1024,
+      "density": 72,
+      "kind": "legacy",
+      "transparentPixels": 398002,
+      "solidMarkPixels": 82702,
+      "sha256": "3f5d941bda78a0c410fced52fc581c26afe306f976a0ce663335514c59ff109b"
+    },
+    {
+      "file": "Gouxuan.iconset/icon_16x16.png",
+      "width": 16,
+      "height": 16,
+      "density": 72,
+      "kind": "legacy",
+      "transparentPixels": 72,
+      "solidMarkPixels": 2,
+      "sha256": "a33d49c30ecea2be4146612ceafd361d63b9f4a7679000f7fabb1b27bd77322f"
+    },
+    {
+      "file": "Gouxuan.iconset/icon_16x16@2x.png",
+      "width": 32,
+      "height": 32,
+      "density": 144,
+      "kind": "legacy",
+      "transparentPixels": 360,
+      "solidMarkPixels": 39,
+      "sha256": "7210b9e24b515d4b9f7758258fd496d8525ce79bd1d8042782e2993eb541b01f"
+    },
+    {
+      "file": "Gouxuan.iconset/icon_32x32.png",
+      "width": 32,
+      "height": 32,
+      "density": 72,
+      "kind": "legacy",
+      "transparentPixels": 360,
+      "solidMarkPixels": 39,
+      "sha256": "79997e8c8db9d1e2bc478e81419a25dea43f187f2cc9d86211924f342c506b22"
+    },
+    {
+      "file": "Gouxuan.iconset/icon_32x32@2x.png",
+      "width": 64,
+      "height": 64,
+      "density": 144,
+      "kind": "legacy",
+      "transparentPixels": 1484,
+      "solidMarkPixels": 235,
+      "sha256": "2fd30d97d8d8b807ce9501837e657f3237a74ae912d185f20d5acc7bbd983b3d"
+    },
+    {
+      "file": "Gouxuan.iconset/icon_128x128.png",
+      "width": 128,
+      "height": 128,
+      "density": 72,
+      "kind": "legacy",
+      "transparentPixels": 6020,
+      "solidMarkPixels": 1126,
+      "sha256": "c4e53bac7f176eed794802c8cbea2818a525a07570c50d11f9185029ee421653"
+    },
+    {
+      "file": "Gouxuan.iconset/icon_128x128@2x.png",
+      "width": 256,
+      "height": 256,
+      "density": 144,
+      "kind": "legacy",
+      "transparentPixels": 24768,
+      "solidMarkPixels": 4883,
+      "sha256": "192cf1a613cd99eb71523731f1ce76f6423cf455a29213e22ceb787f5b63d826"
+    },
+    {
+      "file": "Gouxuan.iconset/icon_256x256.png",
+      "width": 256,
+      "height": 256,
+      "density": 72,
+      "kind": "legacy",
+      "transparentPixels": 24768,
+      "solidMarkPixels": 4883,
+      "sha256": "73846b099721b37f2d5febf14d7d336ab524849944e54a87787fa196887c077b"
+    },
+    {
+      "file": "Gouxuan.iconset/icon_256x256@2x.png",
+      "width": 512,
+      "height": 512,
+      "density": 144,
+      "kind": "legacy",
+      "transparentPixels": 99350,
+      "solidMarkPixels": 20293,
+      "sha256": "7fdeec4135161b98968b01cbb6faf7f5e988a52e7d465ad15456d322a6eaea89"
+    },
+    {
+      "file": "Gouxuan.iconset/icon_512x512.png",
+      "width": 512,
+      "height": 512,
+      "density": 72,
+      "kind": "legacy",
+      "transparentPixels": 99350,
+      "solidMarkPixels": 20293,
+      "sha256": "5119ccfcf5e26b8fa74b2429a502522fa3c79522149c2f9f2493b77680281489"
+    },
+    {
+      "file": "Gouxuan.iconset/icon_512x512@2x.png",
+      "width": 1024,
+      "height": 1024,
+      "density": 144,
+      "kind": "legacy",
+      "transparentPixels": 398002,
+      "solidMarkPixels": 82702,
+      "sha256": "f7693675664027e060ccdc747077e290463bbebaa639a029897bceb3a238af49"
+    },
+    {
+      "file": "menu-bar/GouxuanTemplate.png",
+      "width": 16,
+      "height": 16,
+      "density": 72,
+      "kind": "template",
+      "transparentPixels": 175,
+      "solidMarkPixels": 13,
+      "sha256": "e9168a7399a0a8848633dea40570930fb70d542cc3661655c09472a57f7a19e5"
+    },
+    {
+      "file": "menu-bar/GouxuanTemplate@2x.png",
+      "width": 32,
+      "height": 32,
+      "density": 144,
+      "kind": "template",
+      "transparentPixels": 766,
+      "solidMarkPixels": 102,
+      "sha256": "893ac8fad80de27ed45f97fc0980af58259bcc911252787dc00c5751f4dd8b29"
+    }
+  ],
+  "systemAppearanceVerified": false
+}

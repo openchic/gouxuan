@@ -1,6 +1,32 @@
-# 检索服务的运行定义。索引与语料走 named volume，不 bind mount 宿主目录
-# （macOS 跨 VM 挂载会拖慢热重载与索引读写）。
+# 本地服务栈。数据库数据使用 named volume，迁移在 API 启动前单独执行。
 services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: gouxuan
+      POSTGRES_PASSWORD: gouxuan
+      POSTGRES_DB: gouxuan
+    ports:
+      - '127.0.0.1:55432:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U gouxuan -d gouxuan']
+      interval: 2s
+      timeout: 3s
+      retries: 15
+
+  migrate:
+    build:
+      context: ./services/api
+    image: gouxuan-api
+    command: alembic upgrade head
+    environment:
+      GOUXUAN_DATABASE_URL: postgresql+psycopg://gouxuan:gouxuan@postgres:5432/gouxuan
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   api:
     build:
       context: ./services/api
@@ -8,9 +34,10 @@ services:
     ports:
       - '8000:8000'
     environment:
-      GOUXUAN_INDEX_PATH: /app/data/index.db
-    volumes:
-      - api-data:/app/data
+      GOUXUAN_DATABASE_URL: postgresql+psycopg://gouxuan:gouxuan@postgres:5432/gouxuan
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
     healthcheck:
       test:
         [
@@ -24,4 +51,4 @@ services:
       retries: 5
 
 volumes:
-  api-data:
+  postgres-data:

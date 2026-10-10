@@ -1,0 +1,8 @@
+.login-logo {
+  display: block;
+  width: calc(var(--spacing-12) + var(--spacing-3));
+  height: calc(var(--spacing-12) + var(--spacing-3));
+  border-radius: var(--radius-element);
+  outline: var(--border-width) solid var(--color-border);
+  outline-offset: calc(-1 * var(--border-width));
+}

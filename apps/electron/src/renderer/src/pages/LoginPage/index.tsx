@@ -2,8 +2,14 @@ import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { Button } from '@astryxdesign/core/Button'
 import { TextInput } from '@astryxdesign/core/TextInput'
-import { Icon } from '@astryxdesign/core/Icon'
-import { Brand, InlineError } from '../../components'
+import { VStack } from '@astryxdesign/core/VStack'
+import {
+  ArrowRightIcon,
+  EyeClosedIcon,
+  EyeOpenIcon,
+} from '@radix-ui/react-icons'
+import { InlineError } from '../../components'
+import { LoginLogo } from './components'
 import './index.css'
 
 export const LoginPage = (): React.JSX.Element => {
@@ -13,30 +19,28 @@ export const LoginPage = (): React.JSX.Element => {
   const [error, setError] = useState('')
   return (
     <main className="login-page">
-      <div className="login-story">
-        <Brand />
-        <div>
-          <h1>
-            读懂保险，
-            <br />
-            从这里开始。
-          </h1>
-          <p>
-            把复杂的条款放回具体的问题里，
-            <br />
-            让每个回答都有可以核对的出处。
-          </p>
-        </div>
-      </div>
-      <div className="login-form-region">
-        <form
+      <VStack className="login-content" gap={8} width="100%" maxWidth={360}>
+        <VStack as="header" className="login-identity" hAlign="center" gap={5}>
+          <LoginLogo />
+          <VStack hAlign="center" gap={2}>
+            <h1 id="login-title">登录钩玄</h1>
+            <p>读懂保险，从一个问题开始。</p>
+          </VStack>
+        </VStack>
+        <VStack
+          as="form"
           className="login-form"
+          gap={5}
+          aria-labelledby="login-title"
           onSubmit={event => {
             event.preventDefault()
-            setError('认证服务尚未接入，当前无法登录。你可以先预览工作台。')
+            if (!email.trim() || !password) return
+            setError(
+              import.meta.env.DEV
+                ? '认证服务尚未接入，请先预览工作台。'
+                : '认证服务尚未接入，暂时无法登录。'
+            )
           }}>
-          <h2>登录钩玄</h2>
-          <p className="login-introduction">使用管理员为你开通的账号。</p>
           <TextInput
             label="邮箱"
             type="email"
@@ -46,11 +50,11 @@ export const LoginPage = (): React.JSX.Element => {
               setEmail(value)
               setError('')
             }}
-            placeholder="name@example.com"
+            placeholder="输入邮箱地址"
             autoComplete="username"
-            isRequired
+            size="lg"
           />
-          <div className="password-field">
+          <VStack className="login-password-field">
             <TextInput
               label="密码"
               type={isPasswordVisible ? 'text' : 'password'}
@@ -62,18 +66,21 @@ export const LoginPage = (): React.JSX.Element => {
               }}
               placeholder="输入密码"
               autoComplete="current-password"
-              isRequired
+              size="lg"
             />
             <button
               type="button"
-              className="password-toggle"
+              className="login-password-toggle"
               aria-label={isPasswordVisible ? '隐藏密码' : '显示密码'}
               aria-pressed={isPasswordVisible}
               onClick={() => setIsPasswordVisible(current => !current)}>
-              {isPasswordVisible ? '隐藏' : '显示'}
+              {isPasswordVisible ? (
+                <EyeClosedIcon aria-hidden="true" />
+              ) : (
+                <EyeOpenIcon aria-hidden="true" />
+              )}
             </button>
-          </div>
-          {error && <InlineError>{error}</InlineError>}
+          </VStack>
           <Button
             label="登录"
             variant="primary"
@@ -82,17 +89,21 @@ export const LoginPage = (): React.JSX.Element => {
             size="lg"
             isDisabled={!email.trim() || !password}
           />
-          <div className="login-help">
-            <Icon icon="info" size="sm" />
-            <span>开通账号或重置密码，请联系管理员。</span>
-          </div>
-          <div className="login-preview">
-            <Link to="/chat">
-              先看看工作台 <span aria-hidden="true">→</span>
-            </Link>
-          </div>
-        </form>
-      </div>
+          <VStack className="login-feedback" hAlign="center" vAlign="center">
+            {error ? (
+              <InlineError>{error}</InlineError>
+            ) : (
+              <p>账号开通与密码重置，请联系管理员。</p>
+            )}
+          </VStack>
+        </VStack>
+        {import.meta.env.DEV && (
+          <Link className="login-preview" to="/chat">
+            先看看工作台
+            <ArrowRightIcon aria-hidden="true" />
+          </Link>
+        )}
+      </VStack>
     </main>
   )
 }

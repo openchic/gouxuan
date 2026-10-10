@@ -2,6 +2,8 @@ packages:
   - apps/*
 allowBuilds:
   # core 的 postinstall 只打印一句 "run astryx init" 提示，不参与构建
+  # CLI ships its executable in the package and does not need a build script
+  '@astryxdesign/cli': false
   '@astryxdesign/core': false
   electron: true
   electron-winstaller: false

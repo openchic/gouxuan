@@ -11,6 +11,7 @@ files:
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
   - '!.turbo/**'
 mac:
+  icon: build/icons/gouxuan-v1/Gouxuan.icns
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
     CFBundleDisplayName: 钩玄

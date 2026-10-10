@@ -2,16 +2,8 @@ import { dialog, ipcMain } from 'electron'
 import type { BrowserWindow, IpcMainInvokeEvent } from 'electron'
 import { stat } from 'node:fs/promises'
 import { basename, extname } from 'node:path'
-import {
-  IPC_CHANNELS,
-  isAppearanceContext,
-  isThemePreference,
-} from '../shared/ipc'
-import type {
-  AppearanceContext,
-  BridgeResult,
-  ThemePreference,
-} from '../shared/ipc'
+import { IPC_CHANNELS, isThemePreference } from '../shared/ipc'
+import type { BridgeResult, ThemePreference } from '../shared/ipc'
 
 export const isTrustedPage = (url: string, entryUrl: string): boolean => {
   try {
@@ -30,7 +22,6 @@ export const isTrustedPage = (url: string, entryUrl: string): boolean => {
 type AppearanceController = {
   getPreference: () => ThemePreference
   setPreference: (mode: ThemePreference) => void
-  setContext: (context: AppearanceContext) => void
 }
 export const registerWindowIpc = (
   getWindow: () => BrowserWindow | undefined,
@@ -89,12 +80,6 @@ export const registerWindowIpc = (
       throw new BridgeFailure('INVALID_ARGUMENT', '不支持此主题。')
     appearance.setPreference(mode)
     return appearance.getPreference()
-  })
-  handle(IPC_CHANNELS.setAppearanceContext, context => {
-    if (!isAppearanceContext(context))
-      throw new BridgeFailure('INVALID_ARGUMENT', '页面类型不正确。')
-    appearance.setContext(context)
-    return null
   })
   handle(IPC_CHANNELS.chooseKnowledgeFile, async (argument, window) => {
     if (argument !== undefined)

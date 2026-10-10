@@ -29,6 +29,8 @@ WORKDIR /app
 
 COPY --from=builder /opt/venv /opt/venv
 COPY --chown=api:api app ./app
+COPY --chown=api:api alembic.ini ./
+COPY --chown=api:api migrations ./migrations
 
 USER api
 EXPOSE 8000

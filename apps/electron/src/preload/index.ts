@@ -7,8 +7,6 @@ const desktop: DesktopBridge = {
   appearance: {
     getPreference: () => ipcRenderer.invoke(IPC_CHANNELS.getTheme),
     setPreference: mode => ipcRenderer.invoke(IPC_CHANNELS.setTheme, mode),
-    setContext: context =>
-      ipcRenderer.invoke(IPC_CHANNELS.setAppearanceContext, context),
   },
   knowledge: {
     chooseFile: () => ipcRenderer.invoke(IPC_CHANNELS.chooseKnowledgeFile),

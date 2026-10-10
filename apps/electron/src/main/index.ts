@@ -4,26 +4,22 @@ import { pathToFileURL } from 'node:url'
 import { is, optimizer } from '@electron-toolkit/utils'
 import { createPreferences } from './preferences'
 import { isTrustedPage, registerWindowIpc } from './ipc'
-import type { AppearanceContext } from '../shared/ipc'
 
 let mainWindow: BrowserWindow | undefined
 let preferences: ReturnType<typeof createPreferences>
-let appearanceContext: AppearanceContext = 'preview'
 const entryUrl =
   is.dev && process.env['ELECTRON_RENDERER_URL']
     ? process.env['ELECTRON_RENDERER_URL']
     : pathToFileURL(join(__dirname, '../renderer/index.html')).href
 
 const applyAppearance = (): void => {
-  nativeTheme.themeSource =
-    appearanceContext === 'login' ? 'system' : preferences.getTheme()
+  nativeTheme.themeSource = preferences.getTheme()
   mainWindow?.setBackgroundColor(
     nativeTheme.shouldUseDarkColors ? '#1b1b1b' : '#ffffff'
   )
 }
 
 const createWindow = (): void => {
-  appearanceContext = 'preview'
   applyAppearance()
   mainWindow = new BrowserWindow({
     width: 1280,
@@ -65,6 +61,11 @@ const createWindow = (): void => {
 
 app.setName('Gouxuan')
 app.whenReady().then(() => {
+  if (is.dev && process.platform === 'darwin') {
+    app.dock?.setIcon(
+      join(__dirname, '../../build/icons/gouxuan-v1/app-icon-macos-1024.png')
+    )
+  }
   preferences = createPreferences(app.getPath('userData'))
   applyAppearance()
   nativeTheme.on('updated', () => {
@@ -76,10 +77,6 @@ app.whenReady().then(() => {
     getPreference: preferences.getTheme,
     setPreference: mode => {
       preferences.setTheme(mode)
-      applyAppearance()
-    },
-    setContext: context => {
-      appearanceContext = context
       applyAppearance()
     },
   })

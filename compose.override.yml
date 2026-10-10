@@ -1,5 +1,5 @@
 # 开发覆盖：docker compose 会自动合并本文件，不需要 -f。
-# 只挂 app/ 源码做热重载；索引仍在 named volume 里（继承 compose.yml 的挂载）。
+# 只挂 app/ 源码做热重载；表结构通过独立迁移任务更新。
 services:
   api:
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload

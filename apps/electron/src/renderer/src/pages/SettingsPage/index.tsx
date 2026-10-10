@@ -59,14 +59,11 @@ export const SettingsPage = (): React.JSX.Element => {
           </Link>
         </div>
       </section>
-      <section className="settings-section">
-        <div className="settings-section-title">
-          <h2>关于钩玄</h2>
-        </div>
+      <section className="settings-section settings-about-section">
         <div className="setting-row">
           <div>
             <h3>钩玄桌面客户端</h3>
-            <p>保险咨询问答 · v0.1.0</p>
+            <p>v0.1.0</p>
           </div>
         </div>
       </section>

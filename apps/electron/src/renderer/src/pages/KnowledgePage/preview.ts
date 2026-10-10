@@ -1,4 +1,5 @@
 export type KnowledgeStatus = '已发布' | '待审核' | '处理中' | '失败'
+export type KnowledgeStatusFilter = '全部' | KnowledgeStatus
 export type PreviewDocument = {
   id: string
   name: string

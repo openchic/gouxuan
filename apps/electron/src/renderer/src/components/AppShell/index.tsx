@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { Outlet, useNavigate, useRouterState } from '@tanstack/react-router'
 import { Theme } from '@astryxdesign/core/theme'
 import { neutralTheme } from '@astryxdesign/theme-neutral/built'
@@ -7,7 +7,6 @@ import { Button } from '@astryxdesign/core/Button'
 import { Icon } from '@astryxdesign/core/Icon'
 import { TextInput } from '@astryxdesign/core/TextInput'
 import { GearIcon, PlusIcon } from '@radix-ui/react-icons'
-import { InlineError } from '../InlineError'
 import { WorkspaceSideNav } from '../WorkspaceSideNav'
 import { useWorkspace } from '../../hooks'
 import { previewConversations } from '../../data/preview-conversations'
@@ -18,25 +17,15 @@ export const AppShell = (): React.JSX.Element => {
   const navigate = useNavigate()
   const { theme } = useWorkspace()
   const [search, setSearch] = useState('')
-  const [appearanceError, setAppearanceError] = useState('')
   const isLogin = pathname === '/login'
   const isSettings = pathname.startsWith('/settings')
-  useEffect(() => {
-    window.desktop.appearance
-      .setContext(isLogin ? 'login' : 'preview')
-      .then(result => {
-        setAppearanceError(result.ok ? '' : result.error.message)
-      })
-      .catch(() => setAppearanceError('原生外观同步失败，请重试。'))
-  }, [isLogin])
   const conversations = previewConversations.filter(item =>
     item.title.includes(search.trim())
   )
 
   return (
-    <Theme theme={neutralTheme} mode={isLogin ? 'system' : theme}>
+    <Theme theme={neutralTheme} mode={theme}>
       <div className="app-shell" data-platform={window.desktop.platform}>
-        {appearanceError && <InlineError>{appearanceError}</InlineError>}
         {isLogin || isSettings ? (
           <Outlet />
         ) : (
